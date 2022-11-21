@@ -59,6 +59,8 @@
 		611CD2FD292BB3FC0010E795 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				619A6BF7292B888C00E8BA52 /* Assets.xcassets */,
+				619A6BFC292B888C00E8BA52 /* Info.plist */,
 				611CD300292BB4280010E795 /* ImageFeedFonts */,
 			);
 			path = Resources;
@@ -92,15 +94,13 @@
 		619A6BED292B888B00E8BA52 /* ImageFeed */ = {
 			isa = PBXGroup;
 			children = (
-				611CD2FD292BB3FC0010E795 /* Resources */,
 				611CD2FC292BA9940010E795 /* ImageList */,
+				611CD2FD292BB3FC0010E795 /* Resources */,
+				619A6C05292B8A4300E8BA52 /* Helpers */,
 				619A6BEE292B888B00E8BA52 /* AppDelegate.swift */,
 				619A6BF0292B888B00E8BA52 /* SceneDelegate.swift */,
 				619A6BF4292B888B00E8BA52 /* Main.storyboard */,
-				619A6BF7292B888C00E8BA52 /* Assets.xcassets */,
 				619A6BF9292B888C00E8BA52 /* LaunchScreen.storyboard */,
-				619A6BFC292B888C00E8BA52 /* Info.plist */,
-				619A6C05292B8A4300E8BA52 /* Helpers */,
 			);
 			path = ImageFeed;
 			sourceTree = "<group>";
@@ -341,7 +341,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7WTLW784B9;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ImageFeed/Info.plist;
+				INFOPLIST_FILE = ImageFeed/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -373,7 +373,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7WTLW784B9;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ImageFeed/Info.plist;
+				INFOPLIST_FILE = ImageFeed/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

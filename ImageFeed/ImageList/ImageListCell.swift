@@ -7,7 +7,7 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet weak var contentImageView: UIImageView!
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var blurImageView: UIView!
+    @IBOutlet weak var blurView: UIView!
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -17,8 +17,8 @@ final class ImagesListCell: UITableViewCell {
     
     func addGradient() {
         let gradient = CAGradientLayer()
-        gradient.frame = blurImageView.bounds
+        gradient.frame = blurView.bounds
         gradient.colors = [UIColor.ypGradientWhite.cgColor, UIColor.ypGradientBlack.cgColor]
-        blurImageView.layer.insertSublayer(gradient, at: 0)
+        blurView.layer.insertSublayer(gradient, at: 0)
     }
 }
