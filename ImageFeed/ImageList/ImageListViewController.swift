@@ -28,7 +28,7 @@ class ImageListViewController: UIViewController {
         guard let contentImage = UIImage(named: photosName[indexPath.row]) else { return }
         cell.contentImageView.image = contentImage
         cell.dateLabel.text = Date().dateTimeString
-        if indexPath.row % 2 == 0 {
+        if indexPath.row % 2 != 0 {
             cell.likeButton.setImage(UIImage(named: "activeLike"), for: .normal)
         } else {
             cell.likeButton.setImage(UIImage(named: "inactiveLike"), for: .normal)
