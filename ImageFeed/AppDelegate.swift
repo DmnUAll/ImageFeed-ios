@@ -7,12 +7,13 @@
 
 import UIKit
 
+// Warning: This method should not be called on the main thread as it may lead to UI unresponsiveness.
+// Based on apple bug reports - there is no solution for this bug yet (https://developer.apple.com/forums/thread/712074)
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        sleep(1)
         return true
     }
 

@@ -2,6 +2,9 @@ import UIKit
 
 final class SingleImageViewController: UIViewController {
 
+    @IBOutlet private weak var scrollView: UIScrollView!
+    @IBOutlet weak var imageView: UIImageView!
+
     var image: UIImage! {
         didSet {
             guard isViewLoaded else { return }
@@ -9,9 +12,6 @@ final class SingleImageViewController: UIViewController {
             rescaleAndCenterImageInScrollView(image: image)
         }
     }
-
-    @IBOutlet private weak var scrollView: UIScrollView!
-    @IBOutlet weak var imageView: UIImageView!
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent

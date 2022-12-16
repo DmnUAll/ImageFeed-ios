@@ -9,10 +9,10 @@ import UIKit
 
 final class ImagesListViewController: UIViewController {
 
+    @IBOutlet private var tableView: UITableView!
+
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     private var photoNames = [String]()
-
-    @IBOutlet private var tableView: UITableView!
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
