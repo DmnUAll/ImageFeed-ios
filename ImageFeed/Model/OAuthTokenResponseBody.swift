@@ -1,6 +1,6 @@
 import Foundation
 
-struct ResponseModel: Decodable {
+struct OAuthTokenResponseBody: Decodable {
     let accessToken, tokenType, scope: String
     let createdAt: Int
 

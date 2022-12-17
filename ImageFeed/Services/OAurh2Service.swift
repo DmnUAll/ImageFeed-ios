@@ -2,11 +2,12 @@ import Foundation
 
 final class OAuth2Service {
 
+    static let shared = OAuth2Service()
     private enum NetworkError: Error {
         case codeError
     }
 
-    static func fetchAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
+    func fetchAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
 
         var urlComponents = URLComponents(string: unsplashTokenURLString)!
         urlComponents.queryItems = [
@@ -33,7 +34,7 @@ final class OAuth2Service {
 
             if let data = data {
                 do {
-                    let decodedData = try JSONDecoder().decode(ResponseModel.self, from: data)
+                    let decodedData = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
                     completion(.success(decodedData.accessToken))
                 } catch let error {
                     completion(.failure(error))

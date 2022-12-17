@@ -17,9 +17,8 @@ final class AuthViewController: UIViewController {
 
     private func proceedToMainFlow() {
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        // swiftlint:disable force_cast
-        let nextVC = storyBoard.instantiateViewController(withIdentifier: "MainFlow") as! UITabBarController
-        // swiftlint:enable force_cast
+        guard let nextVC = storyBoard.instantiateViewController(
+            withIdentifier: "MainFlow") as? UITabBarController else { return }
         UIApplication.shared.windows.first?.rootViewController = nextVC
         UIApplication.shared.windows.first?.makeKeyAndVisible()
     }
@@ -29,7 +28,7 @@ extension AuthViewController: WebViewViewControllerDelegate {
     // swiftlint:disable identifier_name
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         guard tokenStorage.token != nil else {
-            OAuth2Service.fetchAuthToken(code: code) { result in
+            OAuth2Service.shared.fetchAuthToken(code: code) { result in
                 DispatchQueue.main.async {
                     do {
                         let data = try result.get()

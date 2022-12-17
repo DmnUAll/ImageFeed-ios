@@ -15,9 +15,14 @@ final class WebViewViewController: UIViewController {
 
     weak var delegate: WebViewViewControllerDelegate?
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        configureBackBarButton()
         webView.navigationDelegate = self
 
         var urlComponents = URLComponents(string: unsplashAuthorizeURLString)!
@@ -50,8 +55,9 @@ final class WebViewViewController: UIViewController {
             context: nil)
     }
 
-    @IBAction private func didTapBackButton() {
+    @objc private func didTapBackButton() {
         delegate?.webViewViewControllerDidCancel(self)
+        navigationController?.popToRootViewController(animated: true)
     }
 
     // swiftlint: disable block_based_kvo
@@ -86,6 +92,18 @@ final class WebViewViewController: UIViewController {
             return nil
         }
     }
+
+    private func configureBackBarButton() {
+        let backButtonView = UIView(frame: CGRect(x: 0, y: 0, width: 64, height: 44))
+        let imageView = UIImageView(image: .ypBackBarButtonImage)
+        imageView.frame = CGRect(x: 12, y: 16, width: 8.97, height: 15.59)
+        imageView.image = imageView.image!.withRenderingMode(.alwaysTemplate)
+        imageView.tintColor = .ypBlack
+        backButtonView.addSubview(imageView)
+        backButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapBackButton)))
+        let barButton = UIBarButtonItem(customView: backButtonView)
+        navigationItem.leftBarButtonItem = barButton
+    }
 }
 
 extension WebViewViewController: WKNavigationDelegate {
@@ -95,11 +113,11 @@ extension WebViewViewController: WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
-            if let code = code(from: navigationAction) {
-                delegate?.webViewViewController(self, didAuthenticateWithCode: code)
-                decisionHandler(.cancel)
-            } else {
-                decisionHandler(.allow)
-            }
+        if let code = code(from: navigationAction) {
+            delegate?.webViewViewController(self, didAuthenticateWithCode: code)
+            decisionHandler(.cancel)
+        } else {
+            decisionHandler(.allow)
         }
+    }
 }
