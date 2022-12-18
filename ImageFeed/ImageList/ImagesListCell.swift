@@ -2,12 +2,12 @@ import UIKit
 
 final class ImagesListCell: UITableViewCell {
 
-    static let reuseIdentifier = "ImagesListCell"
-
     @IBOutlet weak var contentImageView: UIImageView!
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var blurView: UIView!
+
+    static let reuseIdentifier = "ImagesListCell"
 
     override func awakeFromNib() {
        super.awakeFromNib()
