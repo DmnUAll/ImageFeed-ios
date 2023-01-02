@@ -6,9 +6,11 @@ protocol ProfileViewDelegate: AnyObject {
 
 final class ProfileView: UIView {
     weak var delegate: ProfileViewDelegate?
-    private let profileImageView: UIImageView = {
+    let profileImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "profilePhoto") ?? UIImage())
         imageView.toAutolayout()
+        imageView.layer.cornerRadius = imageView.frame.size.width / 2
+        imageView.clipsToBounds = true
         return imageView
     }()
 
@@ -20,9 +22,9 @@ final class ProfileView: UIView {
         return button
     }()
 
-    private lazy var profileNameLabel = createLabel(withText: "Екатерина Новикова", textSize: 23, textColor: .ypWhite)
-    private lazy var accountNameLabel = createLabel(withText: "@ekaterina_nov", textSize: 13, textColor: .ypGray)
-    private lazy var profileInfoLabel = createLabel(withText: "Hello, world!", textSize: 13, textColor: .ypWhite)
+    lazy var profileNameLabel = createLabel(withText: "Екатерина Новикова", textSize: 23, textColor: .ypWhite)
+    lazy var accountNameLabel = createLabel(withText: "@ekaterina_nov", textSize: 13, textColor: .ypGray)
+    lazy var profileInfoLabel = createLabel(withText: "Hello, world!", textSize: 13, textColor: .ypWhite)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -55,6 +57,7 @@ final class ProfileView: UIView {
         addSubview(accountNameLabel)
         addSubview(profileInfoLabel)
     }
+
     private func setupConstraints() {
         let constraints = [
             profileImageView.widthAnchor.constraint(equalToConstant: 70),

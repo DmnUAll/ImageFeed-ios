@@ -3,11 +3,14 @@ import Foundation
 final class OAuth2Service {
 
     static let shared = OAuth2Service()
-    private enum NetworkError: Error {
-        case codeError
-    }
+    private var task: URLSessionTask?
+    private var lastCode: String?
 
     func fetchAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
+        assert(Thread.isMainThread)
+        if lastCode == code { return }
+        task?.cancel()
+        lastCode = code
 
         var urlComponents = URLComponents(string: unsplashTokenURLString)!
         urlComponents.queryItems = [
@@ -20,29 +23,14 @@ final class OAuth2Service {
         let url = urlComponents.url!
         let request = URLRequest(url: url)
         let session = URLSession.shared
-        let task = session.dataTask(with: request) { (data, response, error) in
-            if let error = error {
+        task = session.objectTask(for: request) { (result: Result<OAuthTokenResponseBody, Error>) in
+            do {
+                let data = try result.get()
+                completion(.success(data.accessToken))
+            } catch let error {
                 completion(.failure(error))
-                return
-            }
-
-            if let response = response as? HTTPURLResponse,
-               response.statusCode < 200 || response.statusCode >= 300 {
-                completion(.failure(NetworkError.codeError))
-                return
-            }
-
-            if let data = data {
-                do {
-                    let decodedData = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
-                    completion(.success(decodedData.accessToken))
-                } catch let error {
-                    completion(.failure(error))
-                }
-            } else {
-                return
             }
         }
-        task.resume()
+        task?.resume()
     }
 }
