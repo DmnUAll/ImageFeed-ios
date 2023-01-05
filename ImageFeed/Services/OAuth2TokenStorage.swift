@@ -1,34 +1,28 @@
 import Foundation
+import SwiftKeychainWrapper
 
 final class OAuth2TokenStorage {
 
-    private enum Keys: String {
-        case bearerToken
-    }
-
-    private let userDefaults = UserDefaults.standard
     var token: String? {
         get {
-            loadUserDefaults(for: .bearerToken, as: String.self)
+            loadFromKeyChain()
         }
         set {
-            saveUserDefaults(value: newValue, at: .bearerToken)
+            saveToKeyChain(value: newValue)
         }
     }
 
-    private func loadUserDefaults<T: Codable>(for key: Keys, as dataType: T.Type) -> T? {
-        guard let data = userDefaults.data(forKey: key.rawValue),
-              let count = try? JSONDecoder().decode(dataType.self, from: data) else {
-            return nil
-        }
-        return count
+    private func loadFromKeyChain() -> String? {
+        let token: String? = KeychainWrapper.standard.string(forKey: "bearerToken")
+        return token
     }
 
-    private func saveUserDefaults<T: Codable>(value: T, at key: Keys) {
-        guard let data = try? JSONEncoder().encode(value) else {
-            print("Can't save data to UserDefaults")
+    private func saveToKeyChain(value: String?) {
+        guard let token = value else { return }
+        let isSuccess = KeychainWrapper.standard.set(token, forKey: "bearerToken")
+        guard isSuccess else {
+            print("Can't save data to KeyChain")
             return
         }
-        userDefaults.set(data, forKey: key.rawValue)
     }
 }

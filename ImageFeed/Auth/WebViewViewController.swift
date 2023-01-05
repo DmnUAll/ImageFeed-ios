@@ -14,6 +14,7 @@ final class WebViewViewController: UIViewController {
     @IBOutlet private var progressView: UIProgressView!
 
     weak var delegate: WebViewViewControllerDelegate?
+    private var estimatedProgressObservation: NSKeyValueObservation?
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
@@ -21,10 +22,28 @@ final class WebViewViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         configureBackBarButton()
         webView.navigationDelegate = self
+        beginObserving()
+        loadPage()
+    }
 
+    @objc private func didTapBackButton() {
+        delegate?.webViewViewControllerDidCancel(self)
+        navigationController?.popToRootViewController(animated: true)
+    }
+
+    private func beginObserving() {
+        estimatedProgressObservation = webView.observe(
+            \.estimatedProgress,
+             options: [],
+             changeHandler: { [weak self] _, _ in
+                 guard let self = self else { return }
+                 self.updateProgress()
+             })
+    }
+
+    private func loadPage() {
         var urlComponents = URLComponents(string: unsplashAuthorizeURLString)!
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: accessKey),
@@ -36,44 +55,6 @@ final class WebViewViewController: UIViewController {
         let request = URLRequest(url: url)
         webView.load(request)
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        webView.addObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            options: .new,
-            context: nil)
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        webView.removeObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            context: nil)
-    }
-
-    @objc private func didTapBackButton() {
-        delegate?.webViewViewControllerDidCancel(self)
-        navigationController?.popToRootViewController(animated: true)
-    }
-
-    // swiftlint: disable block_based_kvo
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey: Any]?,
-        context: UnsafeMutableRawPointer?
-    ) {
-        if keyPath == #keyPath(WKWebView.estimatedProgress) {
-            updateProgress()
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
-    }
-    // swiftlint: enable block_based_kvo
 
     private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
