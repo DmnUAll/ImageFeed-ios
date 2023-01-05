@@ -25,6 +25,7 @@ final class AuthViewController: UIViewController {
     }
 
     private func fetchProfile(token: String) {
+        UIBlockingProgressHUD.show()
         profileService.fetchProfile(tokenStorage.token ?? "") { result in
             DispatchQueue.main.async {
                 do {
@@ -34,6 +35,7 @@ final class AuthViewController: UIViewController {
                 } catch let error {
                     print("Error: ", error)
                 }
+                UIBlockingProgressHUD.dismiss()
             }
         }
     }

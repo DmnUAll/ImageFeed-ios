@@ -26,6 +26,7 @@ extension URLSession {
                     completion(.failure(error))
                 }
             } else {
+                completion(.failure(NetworkError.dataError))
                 return
             }
         })
